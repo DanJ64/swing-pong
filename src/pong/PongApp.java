@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 import draw.*;
+import sound.*;
 import static java.awt.event.KeyEvent.*;
 
 /**
@@ -20,9 +21,13 @@ public class PongApp extends javax.swing.JFrame {
 
     javax.swing.Timer timer;
     Set<Integer> keys;
-    Sprite s = new Sprite("pajaro.png", 100, 100);
-    
-    
+    int puntos1;
+    int puntos2;
+
+    Sprite pala1;
+    Sprite pala2;
+    Sprite bola;
+
     /**
      * Creates new form PongApp
      */
@@ -33,8 +38,18 @@ public class PongApp extends javax.swing.JFrame {
     }
 
     public void inicializar() {
+        // Las teclas pulsadas en cada momento
         keys = new HashSet<Integer>();
+
+        // sprites
+        pala1 = new Sprite("pala.png", 30, 80);
+        pala2 = new Sprite("pala.png", 600, 80);
+        bola = new Sprite("bola.png", 300, 300);
         
+        // marcadores
+        puntos1 = 0;
+        puntos2 = 0;
+
         // Crear el timer y asociarlo a un método que dibuje
         // un fotograma
         int delay = 40; //milliseconds
@@ -46,27 +61,49 @@ public class PongApp extends javax.swing.JFrame {
         timer = new javax.swing.Timer(delay, task);
         timer.start();
 //        Como en este caso el timer solo se pone en marcha, y no se para
-//        podría ser local. 
+//        podría ser local
+
     }
-    
-    
+
     public void dibujarFotograma() {
+        // obtener un buffer
+        // Pintamos en un buffer para evitar el parpadeo del redibujado
         Image buff = new java.awt.image.BufferedImage(this.getWidth(), this.getHeight(), java.awt.image.BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = (Graphics2D)buff.getGraphics();
-        g.setColor(Color.green);
+        Graphics2D g = (Graphics2D) buff.getGraphics();
+
+        // fondo 
+        g.setColor(Color.GREEN);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        s.dibujar(g);
+
+        // marcador
+        g.setColor(Color.BLACK);
+        g.setFont(new java.awt.Font("Lucida console", Font.PLAIN, 20));
+        g.drawString("marcador", 280, 50);
+
+        // figuras
+        bola.dibujar(g);
+        pala1.dibujar(g);
+        pala2.dibujar(g);
+
+        // movimiento:
+        // automáticos
+        // bola.mover()
+        
+        
+        // por eventos
         if (keys.contains(VK_LEFT)) {
-            s.setX(s.getX()-5);
+            bola.setX(bola.getX() - 5);
         }
         if (keys.contains(VK_RIGHT)) {
-            s.setX(s.getX()+5);
+            bola.setX(bola.getX() + 5);
         }
+        if (keys.contains(VK_SPACE)) {
+            StdSound.beep();
+        }
+        
+        // dibujar el buffer en el frame
         this.getGraphics().drawImage(buff, 0, 0, null);
     }
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,7 +143,7 @@ public class PongApp extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyPressed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-       keys.remove(evt.getKeyCode());
+        keys.remove(evt.getKeyCode());
     }//GEN-LAST:event_formKeyReleased
 
     /**

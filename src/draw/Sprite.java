@@ -20,18 +20,19 @@ public class Sprite implements Dibujable {
     int x;
     int y;
     int width;
-    int height;
+    private int height;
 
     public Sprite(String src, int x, int y) {
         try {
             img = ImageIO.read(new File(src)); // Lee el fichero
             width = img.getWidth();
             height = img.getHeight();
-        } catch (IOException e) { // Si hay problemas 
-
+        } catch (Exception e) { // Si hay problemas 
+            e.printStackTrace();
         }
         this.x = x;
         this.y = y;
+        
     }
 
     public int getX() {
@@ -55,5 +56,24 @@ public class Sprite implements Dibujable {
         g.drawImage(img, x, y, width, height, null);
 
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+    
+    
+    
 
 }
