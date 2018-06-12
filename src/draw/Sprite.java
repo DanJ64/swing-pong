@@ -53,7 +53,7 @@ public class Sprite implements Dibujable {
 
     @Override
     public void dibujar(Graphics g) {
-        g.drawImage(img, x, y, width, height, null);
+        g.drawImage(img, x - width / 2, y - height / 2, width, height, null);
 
     }
 
@@ -73,7 +73,13 @@ public class Sprite implements Dibujable {
         this.height = height;
     }
     
-    
+    public boolean colisiona(Sprite otro){
+        Rectangle r1 = new Rectangle(x - width / 2, y - height / 2, width, height);
+        Rectangle r2 = new Rectangle(otro.getX() - otro.getWidth() / 2, 
+        otro.getY() - otro.getHeight()/ 2, otro.getWidth(), otro.getHeight());
+        
+        return r1.intersects(r2);
+    }
     
 
 }

@@ -26,7 +26,7 @@ public class PongApp extends javax.swing.JFrame {
 
     Sprite pala1;
     Sprite pala2;
-    Sprite bola;
+    Pelota bola;
 
     /**
      * Creates new form PongApp
@@ -42,9 +42,9 @@ public class PongApp extends javax.swing.JFrame {
         keys = new HashSet<Integer>();
 
         // sprites
-        pala1 = new Sprite("pala.png", 30, 80);
-        pala2 = new Sprite("pala.png", 600, 80);
-        bola = new Sprite("bola.png", 300, 300);
+        pala1 = new Sprite("pala.png", 30, 300);
+        pala2 = new Sprite("pala.png", 800 - 30, 300);
+        bola = new Pelota(pala1, pala2);
         
         // marcadores
         puntos1 = 0;
@@ -72,8 +72,13 @@ public class PongApp extends javax.swing.JFrame {
         Graphics2D g = (Graphics2D) buff.getGraphics();
 
         // fondo 
-        g.setColor(Color.GREEN);
+        g.setColor(Color.BLACK);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.setColor(Color.WHITE);
+        g.drawLine(30, 60, 800 - 30, 60);// linea arriba
+        g.drawLine(30, 600 - 30, 800 - 30, 600 - 30);// linea abajo
+        g.drawLine(400, 60, 400, 600 - 30);// linea centro
+        
 
         // marcador
         g.setColor(Color.BLACK);
@@ -87,11 +92,12 @@ public class PongApp extends javax.swing.JFrame {
 
         // movimiento:
         // automáticos
-        // bola.mover()
+        bola.mover();
         
         
         // por eventos
-        if (keys.contains(VK_LEFT)) {
+ 
+        /*if (keys.contains(VK_LEFT)) {
             bola.setX(bola.getX() - 5);
         }
         if (keys.contains(VK_RIGHT)) {
@@ -99,6 +105,28 @@ public class PongApp extends javax.swing.JFrame {
         }
         if (keys.contains(VK_SPACE)) {
             StdSound.beep();
+        }
+*/    
+ 
+        if(keys.contains(VK_W)){
+            /*if(!pala1.getY() == 60){
+                
+            }*/
+            pala1.setY(pala1.getY() - 10);
+        }
+        if(keys.contains(VK_S)){
+            pala1.setY(pala1.getY() + 10);
+        }
+        
+        if(keys.contains(VK_UP)){
+            pala2.setY(pala2.getY() - 10);
+        }
+        if(keys.contains(VK_DOWN)){
+            pala2.setY(pala2.getY() + 10);
+        }
+        
+        if(bola.getEstado() == 1){
+            //DAR PUNTUACION Y RESETEAR LA BOLA
         }
         
         // dibujar el buffer en el frame
@@ -115,6 +143,7 @@ public class PongApp extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(800, 600));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
